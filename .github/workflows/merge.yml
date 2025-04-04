@@ -1,8 +1,8 @@
 name: Auto-Merge Develop to Main
 on:
-  schedule:
+  #schedule:
     # Run every 5 minutes
-    - cron: '*/5 * * * *'
+    #- cron: '* * * * *'
   # Allow manual triggering if needed
   workflow_dispatch:
 
