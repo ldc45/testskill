@@ -1,10 +1,12 @@
 name: Auto-Merge Develop to Main
 on:
   schedule:
-    # Run every 3 hours
-    - cron: '0 */3 * * *'
-  # Allow manual triggering if needed
+    - cron: '*/5 * * * *'
   workflow_dispatch:
+
+# Add permissions section
+permissions:
+  contents: write
 
 jobs:
   merge-to-main:
@@ -13,11 +15,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          # Fetch complete history
           fetch-depth: 0
-          # Provide GitHub token to the action
           token: ${{ secrets.GITHUB_TOKEN }}
-          # Default ref is develop, we need to change this to main
           ref: main
 
       - name: Configure Git
@@ -33,7 +32,6 @@ jobs:
           echo "diff_count=$DIFF_COUNT" >> $GITHUB_OUTPUT
 
       - name: Merge develop into main
-        # Only proceed with merge if there are differences between branches
         if: steps.check_changes.outputs.diff_count != '0'
         run: |
           git merge --no-ff origin/develop -m "Auto-merge develop into main (scheduled)"
